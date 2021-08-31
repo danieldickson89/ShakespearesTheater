@@ -1,7 +1,7 @@
-.header {
+.content-header {
     background-color: white;
     position: sticky;
-    position: -webkit-sticky; /* For macOS/iOS Safari */
+    position: -webkit-sticky;
     top: 5rem;
     z-index: 999;
 }
@@ -11,8 +11,6 @@
 }
 
 .reviews-content {
-    /* height: 60rem; */
-    overflow-y: scroll; 
     z-index: 10;
 }
 
@@ -25,20 +23,42 @@
     background-color: whitesmoke;
 }
 
+.review-body {
+    font-style: italic;
+}
+
+.review-date {
+    font-style: italic;
+    color: rgba(0, 0, 0, 0.558);
+}
+
 .pagination-menu {
     width: 45rem;
 }
 
 .pagination-menu-item {
+    width: 2rem;
+    text-align: center;
     font-size: x-large;
     cursor: pointer;
+    border: .25rem solid black;
+    border-radius: 6px;
+    padding-top: .25rem;
 }
 
 .pagination-menu-item:hover {
     color: rgba(0, 0, 0, 0.647);
+    border-color: rgba(0, 0, 0, 0.647);
 }
 
 .pagination-number {
+    color: white;
+    background-color: black;
+    width: 2rem;
+    text-align: center;
     font-size: large;
     font-weight: 600;
+    border: .25rem solid black;
+    border-radius: 6px;
+    padding-top: .3rem;
 }
