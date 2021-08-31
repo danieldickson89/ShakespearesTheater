@@ -32,11 +32,21 @@
                     <fa-icon *ngIf="(calcStars(review.rating)[0] < number && calcStars(review.rating)[1] < 0.5) ||
                                     (calcStars(review.rating)[0] < number - 1)" [icon]="faWhiteStar"></fa-icon>
                 </div>
-                <div class="ml-3">"{{truncatedReview(review.body)}}"</div>
+                <div *ngIf="selectedReview != null && selectedReview.id == review.id" class="ml-1">{{review.rating}}</div>
+                <div *ngIf="selectedReview == null || selectedReview.id != review.id" class="ml-3">"{{truncatedReview(review.body)}}"</div>                
             </div>
-            <!-- <div>{{globalService.formatDate(review.publish_date)}}</div>
-            <div>"{{review.body}}"</div>
-            <div>{{review.author}}</div> -->
+            <div *ngIf="selectedReview != null && selectedReview.id == review.id" class="mt-2">"{{review.body}}"</div>
+            <div *ngIf="selectedReview != null && selectedReview.id == review.id" class="mt-2">{{review.author}}</div>
+            <div *ngIf="selectedReview != null && selectedReview.id == review.id" class="mt-2">{{globalService.formatDate(review.publish_date)}}</div>
         </mat-card>
+    </div>
+</div>
+<div class="flex-container mt-2 mb-3" fxLayout="row" fxLayoutAlign="center">
+    <div class="flex-container pagination-menu" fxLayout="row" fxLayoutAlign="space-between">
+        <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleLeft" (click)="paginateList('First')"></fa-icon>
+        <fa-icon class="pagination-menu-item" [icon]="faAngleLeft" (click)="paginateList('Previous')"></fa-icon>
+        <div class="pagination-number">{{selectedPage}}</div>
+        <fa-icon class="pagination-menu-item" [icon]="faAngleRight" (click)="paginateList('Next')"></fa-icon>
+        <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleRight" (click)="paginateList('Last')"></fa-icon>
     </div>
 </div>

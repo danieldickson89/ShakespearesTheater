@@ -24,3 +24,20 @@
 .review-card:hover {
     background-color: whitesmoke;
 }
+
+.pagination-menu {
+    width: 45rem;
+}
+
+.pagination-menu-item {
+    font-size: x-large;
+    cursor: pointer;
+}
+
+.pagination-menu-item:hover {
+    color: rgba(0, 0, 0, 0.647);
+}
+
+.pagination-number {
+    font-size: large;
+}

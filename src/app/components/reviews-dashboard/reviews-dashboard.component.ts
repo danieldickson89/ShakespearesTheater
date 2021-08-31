@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Review } from '../../models/review';
 import { ReviewsService } from '../../services/reviews.service';
-import { faStar, faStarHalfAlt, faCaretSquareLeft, faCaretSquareRight, faFastBackward, faFastForward } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faStarHalfAlt, faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faWhiteStar } from '@fortawesome/free-regular-svg-icons';
 import { Sorter } from 'src/app/models/sorter';
 import { GlobalService } from 'src/app/services/global.service';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-reviews-dashboard',
@@ -15,13 +16,14 @@ export class ReviewsDashboardComponent implements OnInit {
   faStar = faStar;
   faWhiteStar = faWhiteStar;
   faStarHalfAlt = faStarHalfAlt;
-  faCaretSquareLeft = faCaretSquareLeft;
-  faCaretSquareRight = faCaretSquareRight;
-  faFastBackward = faFastBackward;
-  faFastForward = faFastForward;
+  faAngleDoubleLeft = faAngleDoubleLeft;
+  faAngleLeft = faAngleLeft;
+  faAngleRight = faAngleRight;
+  faAngleDoubleRight = faAngleDoubleRight;
   increments: number[] = [10,25,40];
   sorters: Sorter[] = [
     { value: 'Most Recent', viewValue: 'Most Recent', asc: false },
+    { value: 'Oldest', viewValue: 'Oldest', asc: true },
     { value: 'Top Ratings', viewValue: 'Highest - Lowest', asc: false },
     { value: 'Lowest Ratings', viewValue: 'Lowest - Highest', asc: true }
   ];
@@ -34,7 +36,8 @@ export class ReviewsDashboardComponent implements OnInit {
 
   constructor(
     private reviewService: ReviewsService,
-    public globalService: GlobalService
+    public globalService: GlobalService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +55,10 @@ export class ReviewsDashboardComponent implements OnInit {
     this.reviewService.getReview(review.id).subscribe((data: Review) => {
       this.selectedReview = data;
     });
+  }
+
+  openReview(review: Review) {
+    
   }
 
   calcStars(rating: number): [wholeStars: number, decimal: number] {
@@ -79,13 +86,19 @@ export class ReviewsDashboardComponent implements OnInit {
   }
 
   incrementChanged(increment: number) {
+    this.selectedReview = {};
+    this.selectedPage = 1;
     this.selectedIncrement = increment;
     this.paginateList('');
   }
 
   sorterChanged(sorter: String) {
+    this.selectedReview = {};
+    this.selectedPage = 1;
     if (sorter == 'Most Recent') {
       this.sortReviews('date', false);
+    } else if (sorter == 'Oldest') {
+      this.sortReviews('date', true);
     } else if (sorter == 'Top Ratings') {
       this.sortReviews('rating', false);
     } else if (sorter == 'Lowest Ratings') {
@@ -115,17 +128,21 @@ export class ReviewsDashboardComponent implements OnInit {
   }
 
   paginateList(changeType: String) {
+    this.selectedReview = {};
     if (changeType == 'First') {
       this.selectedPage = 1;
     } else if (changeType == 'Previous') {
-      this.selectedPage--;
+      if (this.selectedPage > 1) {
+        this.selectedPage--;
+      }
     } else if (changeType == 'Next') {
-      this.selectedPage++;
+      if (this.selectedPage < (this.reviews.length / this.selectedIncrement)) {
+        this.selectedPage++;
+      }
     } else if (changeType == 'Last') {
       this.selectedPage = this.reviews.length / this.selectedIncrement;
     }
     this.displayedReviews = this.reviews.slice((this.selectedPage - 1) * this.selectedIncrement, 
                                 (this.selectedPage * this.selectedIncrement) > this.reviews.length ? this.reviews.length : (this.selectedPage * this.selectedIncrement));
   }
-
 }
