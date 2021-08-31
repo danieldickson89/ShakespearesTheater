@@ -1,6 +1,6 @@
-#Welcome to Shakespeare's Theater! Below are some instructions to help you get this project up and running on your machine! Good luck!
+Welcome to Shakespeare's Theater! Below are some instructions to help you get this project up and running on your machine! Good luck!
 
-#Instructions:
+# Instructions:
 
 You'll need to have Angular CLI installed on your machine for this project to work after cloning it.
 
