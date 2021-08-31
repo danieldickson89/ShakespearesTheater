@@ -1,0 +1,14 @@
+.sorting-header {
+    width: 45rem;
+}
+
+.reviews-content {
+    height: 60rem;
+    overflow-y: scroll; 
+    /* border: .3rem solid rgba(205, 205, 205, 0.174);
+    border-radius: 6px; */
+}
+
+.review-card {
+    width: 45rem;
+}

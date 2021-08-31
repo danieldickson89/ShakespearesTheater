@@ -1,0 +1,33 @@
+<div class="flex-container" fxLayout="row" fxLayoutAlign="center">
+    <div class="flex-container sorting-header m-3" fxLayout="row" fxLayoutAlign="end">
+        <mat-form-field appearance="fill">
+            <mat-label>Sort By:</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let sorter of sorters" [value]="sorter">
+                {{sorter}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+</div>
+<div class="flex-container" fxLayout="row" fxLayoutAlign="center">
+    <div class="flex-container m-3 reviews-content" fxLayout="column" fxLayoutAlign="center">
+        <mat-card *ngFor="let review of reviews" class="review-card mt-2">
+            <!-- The line below was used to check the ratings against the star values -->
+            <!-- <div>{{calcStars(review.rating)[0]}} {{calcStars(review.rating)[1]}}</div> -->
+            <div class="flex-container" fxLayout="row" fxLayoutAlign="start">
+                <div *ngFor="let number of [1,2,3,4,5]">
+                    <fa-icon *ngIf="calcStars(review.rating)[0] >= number" [icon]="faStar"></fa-icon>
+                </div>
+                <fa-icon *ngIf="calcStars(review.rating)[1] >= 0.5" [icon]="faStarHalfAlt"></fa-icon>
+                <div *ngFor="let number of [5,4,3,2,1]">
+                    <fa-icon *ngIf="(calcStars(review.rating)[0] < number && calcStars(review.rating)[1] < 0.5) ||
+                                    (calcStars(review.rating)[0] < number - 1)" [icon]="faWhiteStar"></fa-icon>
+                </div>
+            </div>
+            <div>{{formatDate(review.publish_date)}}</div>
+            <div>"{{truncatedReview(review.body)}}"</div>
+            <div>{{review.author}}</div> 
+        </mat-card>
+    </div>
+</div>
