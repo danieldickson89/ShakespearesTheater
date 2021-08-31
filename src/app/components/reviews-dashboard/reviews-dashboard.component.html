@@ -1,36 +1,38 @@
 <div *ngIf="displayedReviews.length <= 0" class="mt-3">
     Loading...
 </div>
-<div *ngIf="displayedReviews.length > 0" class="flex-container content-header" fxLayout="row" fxLayoutAlign="center">
-    <div class="flex-container sorting-header ml-3 mt-3" fxLayout="row" fxLayoutAlign="end">
-        <mat-form-field appearance="fill">
-            <mat-label>View Per Page:</mat-label>
-            <mat-select [(value)]="selectedIncrement" (selectionChange)="incrementChanged($event.value)">
-            <mat-option *ngFor="let increment of increments" [value]="increment">
-                {{increment}}
-            </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-            <mat-label>Sort By:</mat-label>
-            <mat-select [(value)]="selectedSorter" (selectionChange)="sorterChanged($event.value)">
-            <mat-option *ngFor="let sorter of sorters" [value]="sorter.value">
-                {{sorter.viewValue}}
-            </mat-option>
-            </mat-select>
-        </mat-form-field>
+<div *ngIf="displayedReviews.length > 0" class="content-header">
+    <div class="flex-container" fxLayout="row" fxLayoutAlign="center">
+        <div class="flex-container sorting-header ml-3 pt-3" fxLayout="row" fxLayoutAlign="end">
+            <mat-form-field appearance="fill">
+                <mat-label>View Per Page:</mat-label>
+                <mat-select [(value)]="selectedIncrement" (selectionChange)="incrementChanged($event.value)">
+                    <mat-option *ngFor="let increment of increments" [value]="increment">
+                        {{increment}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Sort By:</mat-label>
+                <mat-select [(value)]="selectedSorter" (selectionChange)="sorterChanged($event.value)">
+                    <mat-option *ngFor="let sorter of sorters" [value]="sorter.value">
+                        {{sorter.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div *ngIf="displayedReviews.length > 0" class="flex-container mt-2" fxLayout="row" fxLayoutAlign="center">
+        <div class="flex-container pagination-menu" fxLayout="row" fxLayoutAlign="space-between">
+            <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleLeft" (click)="paginateList('First')"></fa-icon>
+            <fa-icon class="pagination-menu-item" [icon]="faAngleLeft" (click)="paginateList('Previous')"></fa-icon>
+            <div class="pagination-number no-select">{{selectedPage}}</div>
+            <fa-icon class="pagination-menu-item" [icon]="faAngleRight" (click)="paginateList('Next')"></fa-icon>
+            <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleRight" (click)="paginateList('Last')"></fa-icon>
+        </div>
     </div>
 </div>
-<div *ngIf="displayedReviews.length > 0" class="flex-container mt-2" fxLayout="row" fxLayoutAlign="center">
-    <div class="flex-container pagination-menu" fxLayout="row" fxLayoutAlign="space-between">
-        <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleLeft" (click)="paginateList('First')"></fa-icon>
-        <fa-icon class="pagination-menu-item" [icon]="faAngleLeft" (click)="paginateList('Previous')"></fa-icon>
-        <div class="pagination-number no-select">{{selectedPage}}</div>
-        <fa-icon class="pagination-menu-item" [icon]="faAngleRight" (click)="paginateList('Next')"></fa-icon>
-        <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleRight" (click)="paginateList('Last')"></fa-icon>
-    </div>
-</div>
-<div class="flex-container" fxLayout="row" fxLayoutAlign="center">
+<div class="flex-container mb-3" fxLayout="row" fxLayoutAlign="center">
     <div class="flex-container ml-3 mr-3 mt-1 reviews-content" fxLayout="column" fxLayoutAlign="center">
         <mat-card *ngFor="let review of displayedReviews" class="review-card mt-2" (click)="selectReview(review)">
             <div class="flex-container" fxLayout="row" fxLayoutAlign="start">
@@ -49,14 +51,5 @@
             <div *ngIf="selectedReview != null && selectedReview.id == review.id" class="review-author mt-2">-{{review.author}}</div>
             <div *ngIf="selectedReview != null && selectedReview.id == review.id" class="review-date mt-2">Submitted on {{globalService.formatDate(review.publish_date)}}</div>
         </mat-card>
-    </div>
-</div>
-<div *ngIf="displayedReviews.length > 0" class="flex-container mt-3" fxLayout="row" fxLayoutAlign="center">
-    <div class="flex-container pagination-menu mb-3" fxLayout="row" fxLayoutAlign="space-between">
-        <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleLeft" (click)="paginateList('First')"></fa-icon>
-        <fa-icon class="pagination-menu-item" [icon]="faAngleLeft" (click)="paginateList('Previous')"></fa-icon>
-        <div class="pagination-number no-select">{{selectedPage}}</div>
-        <fa-icon class="pagination-menu-item" [icon]="faAngleRight" (click)="paginateList('Next')"></fa-icon>
-        <fa-icon class="pagination-menu-item" [icon]="faAngleDoubleRight" (click)="paginateList('Last')"></fa-icon>
     </div>
 </div>

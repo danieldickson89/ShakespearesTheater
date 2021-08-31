@@ -2,7 +2,7 @@
     background-color: white;
     position: sticky;
     position: -webkit-sticky;
-    top: 5rem;
+    top: 72px;
     z-index: 999;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .pagination-menu {
-    width: 45rem;
+    width: 47rem;
 }
 
 .pagination-menu-item {

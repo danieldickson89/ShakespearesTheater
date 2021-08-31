@@ -53,7 +53,11 @@ export class ReviewsDashboardComponent implements OnInit {
 
   selectReview(review: Review) {
     this.reviewService.getReview(review.id).subscribe((data: Review) => {
-      this.selectedReview = data;
+      if (this.selectedReview.id == data.id) {
+        this.selectedReview = {};
+      } else {
+        this.selectedReview = data;
+      }
     });
   }
 
