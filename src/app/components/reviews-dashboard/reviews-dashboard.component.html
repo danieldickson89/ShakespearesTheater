@@ -21,8 +21,6 @@
 <div class="flex-container" fxLayout="row" fxLayoutAlign="center">
     <div class="flex-container ml-3 mr-3 mt-1 reviews-content" fxLayout="column" fxLayoutAlign="center">
         <mat-card *ngFor="let review of displayedReviews" class="review-card mt-2" (click)="selectReview(review)">
-            <!-- The line below was used to check the ratings against the star values -->
-            <!-- <div>{{calcStars(review.rating)[0]}} {{calcStars(review.rating)[1]}}</div> -->
             <div class="flex-container" fxLayout="row" fxLayoutAlign="start">
                 <div *ngFor="let number of [1,2,3,4,5]">
                     <fa-icon *ngIf="calcStars(review.rating)[0] >= number" [icon]="faStar"></fa-icon>
