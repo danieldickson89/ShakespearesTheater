@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Review } from '../../models/review';
 import { ReviewsService } from '../../services/reviews.service';
-import { faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faStarHalfAlt, faCaretSquareLeft, faCaretSquareRight, faFastBackward, faFastForward } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faWhiteStar } from '@fortawesome/free-regular-svg-icons';
+import { Sorter } from 'src/app/models/sorter';
+import { GlobalService } from 'src/app/services/global.service';
 
 @Component({
   selector: 'app-reviews-dashboard',
@@ -13,12 +15,26 @@ export class ReviewsDashboardComponent implements OnInit {
   faStar = faStar;
   faWhiteStar = faWhiteStar;
   faStarHalfAlt = faStarHalfAlt;
-  sorters = ['Most recent', 'Top Ratings', 'Lowest Ratings'];
-  sorter = 'Most recent';
+  faCaretSquareLeft = faCaretSquareLeft;
+  faCaretSquareRight = faCaretSquareRight;
+  faFastBackward = faFastBackward;
+  faFastForward = faFastForward;
+  increments: number[] = [10,25,40];
+  sorters: Sorter[] = [
+    { value: 'Most Recent', viewValue: 'Most Recent', asc: false },
+    { value: 'Top Ratings', viewValue: 'Highest - Lowest', asc: false },
+    { value: 'Lowest Ratings', viewValue: 'Lowest - Highest', asc: true }
+  ];
+  selectedSorter: String = 'Most Recent';
   reviews: Review[] = [];
+  displayedReviews: Review [] = [];
+  selectedReview: any = {};
+  selectedPage: number = 1;
+  selectedIncrement: number = 10;
 
   constructor(
-    private reviewService: ReviewsService
+    private reviewService: ReviewsService,
+    public globalService: GlobalService
   ) { }
 
   ngOnInit(): void {
@@ -32,57 +48,17 @@ export class ReviewsDashboardComponent implements OnInit {
     }); 
   }
 
+  selectReview(review: Review) {
+    this.reviewService.getReview(review.id).subscribe((data: Review) => {
+      this.selectedReview = data;
+    });
+  }
+
   calcStars(rating: number): [wholeStars: number, decimal: number] {
     const wholeStars = Math.floor(rating / 1);
     const decimalAsString = (rating % 1).toFixed(1);
     const decimal: number = +decimalAsString; 
     return [wholeStars, decimal];
-  }
-
-  formatDate(reviewDate: Date): string {
-    var date = new Date(reviewDate);
-    var month = '';
-    switch (date.getMonth() + 1) {
-      case 1:
-        month = 'January';
-        break;
-      case 2:
-        month = 'February';
-        break;
-      case 3:
-        month = 'March';
-        break;
-      case 4:
-        month = 'April';
-        break;
-      case 5:
-        month = 'May';
-        break;
-      case 6:
-        month = 'June';
-        break;
-      case 7:
-        month = 'July';
-        break;
-      case 8:
-        month = 'August';
-        break;
-      case 9:
-        month = 'September';
-        break;
-      case 10:
-        month = 'October';
-        break;
-      case 11:
-        month = 'November';
-        break;
-      case 12:
-        month = 'December';
-        break;
-      default:
-        break;
-    }
-    return `${month} ${date.getDate()}, ${date.getFullYear()}`;
   }
 
   truncatedReview(body: String): String {
@@ -102,19 +78,54 @@ export class ReviewsDashboardComponent implements OnInit {
     }
   }
 
+  incrementChanged(increment: number) {
+    this.selectedIncrement = increment;
+    this.paginateList('');
+  }
+
+  sorterChanged(sorter: String) {
+    if (sorter == 'Most Recent') {
+      this.sortReviews('date', false);
+    } else if (sorter == 'Top Ratings') {
+      this.sortReviews('rating', false);
+    } else if (sorter == 'Lowest Ratings') {
+      this.sortReviews('rating', true);
+    }
+  }
+
   sortReviews(prop: string, asc: boolean) {
     // Logic for ascending order for each review property that's sortable
     if (asc) {
       if (prop == 'date') {
-        this.reviews.sort((a,b) => new Date(a.publish_date).getTime() - new Date(b.publish_date).getTime());
+        this.reviews.sort((a,b) => (a.publish_date < b.publish_date) ? -1 : 1);
+      } else if (prop == 'rating') {
+        this.reviews.sort((a,b) => (a.rating < b.rating) ? -1 : 1);
       }
     } 
     // Logic for descending order for each review property that's sortable
     else {
       if (prop == 'date') {
-        this.reviews.sort((a,b) => new Date(b.publish_date).getTime() - new Date(a.publish_date).getTime());
+        this.reviews.sort((a,b) => (a.publish_date < b.publish_date) ? 1 : -1);
+      } else if (prop == 'rating') {
+        this.reviews.sort((a,b) => (a.rating < b.rating) ? 1 : -1);
       }
     }
+    this.displayedReviews = this.reviews.slice((this.selectedPage - 1) * this.selectedIncrement, 
+                                (this.selectedPage * this.selectedIncrement) > this.reviews.length ? this.reviews.length : (this.selectedPage * this.selectedIncrement));
+  }
+
+  paginateList(changeType: String) {
+    if (changeType == 'First') {
+      this.selectedPage = 1;
+    } else if (changeType == 'Previous') {
+      this.selectedPage--;
+    } else if (changeType == 'Next') {
+      this.selectedPage++;
+    } else if (changeType == 'Last') {
+      this.selectedPage = this.reviews.length / this.selectedIncrement;
+    }
+    this.displayedReviews = this.reviews.slice((this.selectedPage - 1) * this.selectedIncrement, 
+                                (this.selectedPage * this.selectedIncrement) > this.reviews.length ? this.reviews.length : (this.selectedPage * this.selectedIncrement));
   }
 
 }

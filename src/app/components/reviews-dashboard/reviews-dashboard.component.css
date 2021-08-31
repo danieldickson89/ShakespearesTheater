@@ -1,14 +1,26 @@
+.header {
+    background-color: white;
+    position: sticky;
+    position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 5rem;
+    z-index: 999;
+}
+
 .sorting-header {
     width: 45rem;
 }
 
 .reviews-content {
-    height: 60rem;
+    /* height: 60rem; */
     overflow-y: scroll; 
-    /* border: .3rem solid rgba(205, 205, 205, 0.174);
-    border-radius: 6px; */
+    z-index: 10;
 }
 
 .review-card {
     width: 45rem;
+    cursor: pointer;
+}
+
+.review-card:hover {
+    background-color: whitesmoke;
 }
