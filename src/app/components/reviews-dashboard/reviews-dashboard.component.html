@@ -1,7 +1,7 @@
 <div *ngIf="displayedReviews.length <= 0" class="mt-3">
     Loading...
 </div>
-<div *ngIf="displayedReviews.length > 0" class="content-header">
+<div *ngIf="displayedReviews.length > 0" class="content-header pb-2">
     <div class="flex-container" fxLayout="row" fxLayoutAlign="center">
         <div class="flex-container sorting-header ml-3 pt-3" fxLayout="row" fxLayoutAlign="end">
             <mat-form-field appearance="fill">
@@ -33,13 +33,16 @@
     </div>
 </div>
 <div class="flex-container mb-3" fxLayout="row" fxLayoutAlign="center">
-    <div class="flex-container ml-3 mr-3 mt-1 reviews-content" fxLayout="column" fxLayoutAlign="center">
+    <div class="flex-container ml-3 mr-3 reviews-content" fxLayout="column" fxLayoutAlign="center">
         <mat-card *ngFor="let review of displayedReviews" class="review-card mt-2" (click)="selectReview(review)">
             <div class="flex-container" fxLayout="row" fxLayoutAlign="start">
+                <!-- Give a full star for the full rating points the revew has (ex: 3.7 = 3 full stars) -->
                 <div *ngFor="let number of [1,2,3,4,5]">
                     <fa-icon *ngIf="calcStars(review.rating)[0] >= number" [icon]="faStar"></fa-icon>
                 </div>
+                <!-- Give a half star if the decimal number is greater than or equal to 5 -->
                 <fa-icon *ngIf="calcStars(review.rating)[1] >= 0.5" [icon]="faStarHalfAlt"></fa-icon>
+                <!-- Give an empty star for their remaining (out of 5 stars) -->
                 <div *ngFor="let number of [5,4,3,2,1]">
                     <fa-icon *ngIf="(calcStars(review.rating)[0] < number && calcStars(review.rating)[1] < 0.5) ||
                                     (calcStars(review.rating)[0] < number - 1)" [icon]="faWhiteStar"></fa-icon>

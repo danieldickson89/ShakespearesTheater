@@ -16,6 +16,7 @@
 
 .review-card {
     width: 45rem;
+    min-width: 45rem;
     cursor: pointer;
 }
 

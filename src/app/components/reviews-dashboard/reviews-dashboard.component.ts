@@ -5,7 +5,6 @@ import { faStar, faStarHalfAlt, faAngleDoubleLeft, faAngleLeft, faAngleRight, fa
 import { faStar as faWhiteStar } from '@fortawesome/free-regular-svg-icons';
 import { Sorter } from 'src/app/models/sorter';
 import { GlobalService } from 'src/app/services/global.service';
-import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-reviews-dashboard',
@@ -20,7 +19,7 @@ export class ReviewsDashboardComponent implements OnInit {
   faAngleLeft = faAngleLeft;
   faAngleRight = faAngleRight;
   faAngleDoubleRight = faAngleDoubleRight;
-  increments: number[] = [10,25,40];
+  increments: number[] = [10,15,25,50,100];
   sorters: Sorter[] = [
     { value: 'Most Recent', viewValue: 'Most Recent', asc: false },
     { value: 'Oldest', viewValue: 'Oldest', asc: true },
@@ -37,7 +36,6 @@ export class ReviewsDashboardComponent implements OnInit {
   constructor(
     private reviewService: ReviewsService,
     public globalService: GlobalService,
-    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +49,9 @@ export class ReviewsDashboardComponent implements OnInit {
     }); 
   }
 
+  // Set the selected review by calling the getReview API. This is unnecessary since we have the whole array
+  //    but is a way to still include using that API endpoint.
+  // If the same review is clicked twice we reset the selectedReview to close it.
   selectReview(review: Review) {
     this.reviewService.getReview(review.id).subscribe((data: Review) => {
       if (this.selectedReview.id == data.id) {
@@ -61,10 +62,7 @@ export class ReviewsDashboardComponent implements OnInit {
     });
   }
 
-  openReview(review: Review) {
-    
-  }
-
+  // Returns the rating's whole number and decimal as a tuple so we can use both separately
   calcStars(rating: number): [wholeStars: number, decimal: number] {
     const wholeStars = Math.floor(rating / 1);
     const decimalAsString = (rating % 1).toFixed(1);
@@ -72,6 +70,7 @@ export class ReviewsDashboardComponent implements OnInit {
     return [wholeStars, decimal];
   }
 
+  // Keeps our review snippets to 10 words or less
   truncatedReview(body: String): String {
     var words = body.split(' ');
     var isLong = words.length > 10 ? true : false;
@@ -89,6 +88,8 @@ export class ReviewsDashboardComponent implements OnInit {
     }
   }
 
+  // When the increment value is changed we reset the selected view, page back to 1, and call paginateList to
+  //   show the appropriate list of reviews
   incrementChanged(increment: number) {
     this.selectedReview = {};
     this.selectedPage = 1;
@@ -96,6 +97,8 @@ export class ReviewsDashboardComponent implements OnInit {
     this.paginateList('');
   }
 
+  // When the sorter value is changed we reset the selected review, page back to 1, and hten call sortReviews with the
+  //    corresponding parameters
   sorterChanged(sorter: String) {
     this.selectedReview = {};
     this.selectedPage = 1;
@@ -110,6 +113,7 @@ export class ReviewsDashboardComponent implements OnInit {
     }
   }
 
+  // Contains logic for sorting on different property types in ASC or DESC orders
   sortReviews(prop: string, asc: boolean) {
     // Logic for ascending order for each review property that's sortable
     if (asc) {
@@ -131,6 +135,7 @@ export class ReviewsDashboardComponent implements OnInit {
                                 (this.selectedPage * this.selectedIncrement) > this.reviews.length ? this.reviews.length : (this.selectedPage * this.selectedIncrement));
   }
 
+  // Checks which paginate button was clicked and then adjusts the displayedReviews to the appropriate subarray of reviews
   paginateList(changeType: String) {
     this.selectedReview = {};
     if (changeType == 'First') {
@@ -144,7 +149,7 @@ export class ReviewsDashboardComponent implements OnInit {
         this.selectedPage++;
       }
     } else if (changeType == 'Last') {
-      this.selectedPage = this.reviews.length / this.selectedIncrement;
+      this.selectedPage = Math.ceil(this.reviews.length / this.selectedIncrement);
     }
     this.displayedReviews = this.reviews.slice((this.selectedPage - 1) * this.selectedIncrement, 
                                 (this.selectedPage * this.selectedIncrement) > this.reviews.length ? this.reviews.length : (this.selectedPage * this.selectedIncrement));
