@@ -33,7 +33,7 @@ export class ReviewsService {
     var reviewUrl = this.reviewsUrl + '/' + id;
     return this.http.get<Review>(reviewUrl, {headers: this.httpOptions.headers})
       .pipe(
-        tap(_ => console.log('fetched reviews')),
+        tap(_ => console.log('fetched review')),
         catchError(this.handleError<Review>('getReview'))
       );
   }
