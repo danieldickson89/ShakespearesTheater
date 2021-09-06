@@ -1,5 +1,5 @@
 export interface Sorter {
-    value: String,
-    viewValue: String,
+    value: string,
+    viewValue: string,
     asc: Boolean
 }

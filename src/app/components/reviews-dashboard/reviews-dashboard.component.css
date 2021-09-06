@@ -12,6 +12,7 @@
 
 .reviews-content {
     z-index: 10;
+    margin-top: 2rem;
 }
 
 .review-card {

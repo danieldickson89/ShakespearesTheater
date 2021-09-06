@@ -29,7 +29,7 @@ export class ReviewsService {
       );
   }
 
-  getReview(id: String) {
+  getReview(id: string) {
     var reviewUrl = this.reviewsUrl + '/' + id;
     return this.http.get<Review>(reviewUrl, {headers: this.httpOptions.headers})
       .pipe(
