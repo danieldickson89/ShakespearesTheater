@@ -43,7 +43,7 @@ export class ReviewsDashboardComponent implements OnInit {
   }
 
   getReviews(): void {
-    this.reviewService.getReviews().subscribe((data: any[])=>{
+    this.reviewService.getReviews().subscribe((data: Review[])=>{
       this.reviews = data;
       this.sortReviews('date', false);
     }); 
