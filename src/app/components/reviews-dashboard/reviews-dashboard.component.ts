@@ -26,7 +26,7 @@ export class ReviewsDashboardComponent implements OnInit {
     { value: 'Top Ratings', viewValue: 'Highest - Lowest', asc: false },
     { value: 'Lowest Ratings', viewValue: 'Lowest - Highest', asc: true }
   ];
-  selectedSorter: String = 'Most Recent';
+  selectedSorter: string = 'Most Recent';
   reviews: Review[] = [];
   displayedReviews: Review [] = [];
   selectedReview: any = {};
@@ -71,7 +71,7 @@ export class ReviewsDashboardComponent implements OnInit {
   }
 
   // Keeps our review snippets to 10 words or less
-  truncatedReview(body: String): String {
+  truncatedReview(body: string): string {
     var words = body.split(' ');
     var isLong = words.length > 10 ? true : false;
     var truncatedBody = '';
@@ -99,7 +99,7 @@ export class ReviewsDashboardComponent implements OnInit {
 
   // When the sorter value is changed we reset the selected review, page back to 1, and hten call sortReviews with the
   //    corresponding parameters
-  sorterChanged(sorter: String) {
+  sorterChanged(sorter: string) {
     this.selectedReview = {};
     this.selectedPage = 1;
     if (sorter == 'Most Recent') {
@@ -136,7 +136,7 @@ export class ReviewsDashboardComponent implements OnInit {
   }
 
   // Checks which paginate button was clicked and then adjusts the displayedReviews to the appropriate subarray of reviews
-  paginateList(changeType: String) {
+  paginateList(changeType: string) {
     this.selectedReview = {};
     if (changeType == 'First') {
       this.selectedPage = 1;
